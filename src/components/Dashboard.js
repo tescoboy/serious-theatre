@@ -154,7 +154,9 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
                   name="rating"
                   value={editedPlay.rating}
                   onChange={handleInputChange}
-                  className="input"
+                  className="input ranking-input"
+                  min="0"
+                  max="6"
                 />
               </label>
             </div>
