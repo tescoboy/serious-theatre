@@ -1,73 +1,4 @@
-/* General Styles */
-body {
-  font-family: 'Roboto', sans-serif;
-  background-color: #fafafa; /* Light background for the entire dashboard */
-  margin: 0;
-  padding: 0;
-}
-
-/* Tile Styles */
-.tile {
-  background-color: #f4f4f9; /* Soft light gray background */
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px; /* Space between tiles */
-}
-
-.tile h3 {
-  font-size: 20px;
-  color: #333;
-  font-weight: 600;
-}
-
-.tile ul {
-  list-style: none;
-  padding: 0;
-}
-
-.tile li {
-  margin-bottom: 15px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 16px;
-  color: #555;
-}
-
-.tile p {
-  color: #777;
-}
-
-/* Button Styles */
-.button {
-  padding: 8px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 14px;
-  border: none;
-}
-
-.button--edit {
-  background-color: #4a90e2; /* Modern blue color */
-  color: white;
-}
-
-.button--delete {
-  background-color: #e94e77; /* Soft red color */
-  color: white;
-}
-
-.button--close {
-  background-color: #e94e77; /* Soft red color */
-  color: white;
-  padding: 8px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-/* Overlay Styles */
+/* Overlay and Inputs */
 .overlay {
   position: fixed;
   top: 0;
@@ -81,43 +12,56 @@ body {
 }
 
 .overlay__content {
-  background-color: white;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 10px;
   width: 400px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .overlay__content h3 {
-  font-size: 22px;
+  font-size: 24px;
+  margin-bottom: 20px;
   color: #333;
-  font-weight: 600;
-}
-
-.overlay__content p {
-  font-size: 16px;
-  color: #555;
-}
-
-/* Layout Styles */
-.dashboard {
-  display: flex;
-  flex-direction: column; /* Stacking tiles vertically */
-  gap: 30px; /* Add space between tiles */
-  padding: 40px;
-}
-
-.dashboard__summary {
   text-align: center;
 }
 
-.dashboard__summary h3 {
-  font-size: 22px;
-  color: #333;
-  font-weight: 600;
+.input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 16px;
 }
 
-.dashboard__summary p {
-  font-size: 18px;
-  color: #4a4a4a;
+.button {
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  border: none;
+}
+
+.button--save {
+  background-color: #4CAF50;
+  color: white;
+  margin-right: 10px;
+}
+
+.button--delete {
+  background-color: #E94E77;
+  color: white;
+}
+
+.button--close {
+  background-color: #ccc;
+  color: white;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
 }
