@@ -1,41 +1,35 @@
-import React, { useState, useEffect } from "react";
-import InputSection from "./components/InputSection";
-import Dashboard from "./components/Dashboard";
+import React, { useState } from "react";
+import InputSection from "./InputSection";
+import Dashboard from "./Dashboard";
 
 const App = () => {
-  const [plays, setPlays] = useState(() => {
-    const savedPlays = JSON.parse(localStorage.getItem("seriousTheatrePlays")) || [];
-    return savedPlays;
-  });
-  const [rating, setRating] = useState(0);
-
-  // Save plays to localStorage whenever plays state changes
-  useEffect(() => {
-    localStorage.setItem("seriousTheatrePlays", JSON.stringify(plays));
-  }, [plays]);
+  const [plays, setPlays] = useState([]);
 
   const addPlay = (newPlay) => {
     setPlays((prevPlays) => [...prevPlays, newPlay]);
+  };
+
+  const editPlay = (editedPlay) => {
+    setPlays((prevPlays) =>
+      prevPlays.map((play) =>
+        play.id === editedPlay.id ? editedPlay : play
+      )
+    );
   };
 
   const deletePlay = (id) => {
     setPlays((prevPlays) => prevPlays.filter((play) => play.id !== id));
   };
 
-  const editPlay = (updatedPlay) => {
-    setPlays((prevPlays) =>
-      prevPlays.map((play) =>
-        play.id === updatedPlay.id ? updatedPlay : play
-      )
-    );
-  };
-
   return (
-    <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
+    <div>
       <h1>Serious Theatre</h1>
-      <h2>Track Your Plays</h2>
-      <InputSection addPlay={addPlay} rating={rating} setRating={setRating} />
-      <Dashboard plays={plays} onEditPlay={editPlay} onDeletePlay={deletePlay} />
+      <InputSection onAddPlay={addPlay} />
+      <Dashboard
+        plays={plays}
+        onEditPlay={editPlay}
+        onDeletePlay={deletePlay}
+      />
     </div>
   );
 };
