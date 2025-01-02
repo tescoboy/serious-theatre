@@ -4,6 +4,7 @@ const App = () => {
   // State for play inputs
   const [playName, setPlayName] = useState("");
   const [playDate, setPlayDate] = useState("");
+  const [rating, setRating] = useState(0);
   const [plays, setPlays] = useState([]);
 
   // Load plays from localStorage on initial render
@@ -20,18 +21,27 @@ const App = () => {
   // Handle form submission
   const handleAddPlay = (e) => {
     e.preventDefault();
-    if (!playName || !playDate) {
-      alert("Please enter both a name and a date for the play.");
+    if (!playName || !playDate || rating === 0) {
+      alert("Please enter a name, date, and rating for the play.");
       return;
     }
 
-    const newPlay = { id: Date.now(), name: playName, date: playDate };
+    const newPlay = { id: Date.now(), name: playName, date: playDate, rating };
     setPlays((prevPlays) => [...prevPlays, newPlay]);
     setPlayName("");
     setPlayDate("");
+    setRating(0);
   };
 
-  // Render the app
+  // Render moons for the rating
+  const renderMoons = (rating) => {
+    const fullMoons = Math.floor(rating);
+    const hasHalfMoon = rating % 1 !== 0;
+    const moons = Array(fullMoons).fill("🌕");
+    if (hasHalfMoon) moons.push("🌗");
+    return moons.join(" ");
+  };
+
   return (
     <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
       <h1>Serious Theatre</h1>
@@ -59,6 +69,38 @@ const App = () => {
               onChange={(e) => setPlayDate(e.target.value)}
               style={{ marginLeft: "10px", padding: "5px" }}
             />
+          </label>
+        </div>
+        <div style={{ marginTop: "10px" }}>
+          <label>
+            Rating:
+            <div style={{ marginLeft: "10px", display: "inline-block" }}>
+              {[1, 2, 3, 4, 5].map((num) => (
+                <span
+                  key={num}
+                  onClick={() => setRating(num)}
+                  style={{
+                    cursor: "pointer",
+                    fontSize: "20px",
+                    marginRight: "5px",
+                    color: num <= rating ? "gold" : "gray",
+                  }}
+                >
+                  🌕
+                </span>
+              ))}
+              <span
+                onClick={() => setRating(rating === 0.5 ? 0 : rating + 0.5)}
+                style={{
+                  cursor: "pointer",
+                  fontSize: "20px",
+                  marginRight: "5px",
+                  color: rating % 1 !== 0 ? "gold" : "gray",
+                }}
+              >
+                🌗
+              </span>
+            </div>
           </label>
         </div>
         <button
@@ -90,6 +132,7 @@ const App = () => {
             <tr>
               <th style={{ border: "1px solid #ddd", padding: "8px" }}>Name</th>
               <th style={{ border: "1px solid #ddd", padding: "8px" }}>Date</th>
+              <th style={{ border: "1px solid #ddd", padding: "8px" }}>Rating</th>
             </tr>
           </thead>
           <tbody>
@@ -97,6 +140,9 @@ const App = () => {
               <tr key={play.id}>
                 <td style={{ border: "1px solid #ddd", padding: "8px" }}>{play.name}</td>
                 <td style={{ border: "1px solid #ddd", padding: "8px" }}>{play.date}</td>
+                <td style={{ border: "1px solid #ddd", padding: "8px" }}>
+                  {renderMoons(play.rating)}
+                </td>
               </tr>
             ))}
           </tbody>
