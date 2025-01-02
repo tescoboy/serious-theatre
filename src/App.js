@@ -35,6 +35,8 @@ const App = () => {
 
   // Handle moon click for rating
   const handleMoonClick = (position) => {
+    if (rating === 6) return; // Prevent changing when "Standing Ovation" is selected
+
     const currentState = getMoonState(position);
     if (currentState === "empty") {
       setRating(position + 1);
@@ -45,8 +47,14 @@ const App = () => {
     }
   };
 
+  // Handle "Standing Ovation" click
+  const handleStandingOvationClick = () => {
+    setRating(rating === 6 ? 0 : 6); // Toggle Standing Ovation
+  };
+
   // Determine the current state of a moon (full, half, empty)
   const getMoonState = (position) => {
+    if (rating === 6) return "standing"; // Override for "Standing Ovation"
     const fullMoons = Math.floor(rating);
     const hasHalfMoon = rating % 1 !== 0;
     if (position < fullMoons) return "full";
@@ -57,7 +65,7 @@ const App = () => {
   // Render moons for rating input
   const renderMoonInput = () => {
     return (
-      <div style={{ display: "flex", gap: "10px", cursor: "pointer" }}>
+      <div style={{ display: "flex", gap: "10px", alignItems: "center", cursor: "pointer" }}>
         {[0, 1, 2, 3, 4].map((position) => {
           const state = getMoonState(position);
           return (
@@ -74,12 +82,23 @@ const App = () => {
             </span>
           );
         })}
+        <span
+          onClick={handleStandingOvationClick}
+          style={{
+            fontSize: "30px",
+            cursor: "pointer",
+            color: rating === 6 ? "#32CD32" : "#ccc",
+          }}
+        >
+          🕺
+        </span>
       </div>
     );
   };
 
-  // Render moons for display in the table
-  const renderMoons = (rating) => {
+  // Render moons and standing ovation for display in the table
+  const renderRating = (rating) => {
+    if (rating === 6) return "🕺 Standing Ovation";
     const fullMoons = Math.floor(rating);
     const hasHalfMoon = rating % 1 !== 0;
     const moons = Array(fullMoons).fill("🌕");
@@ -159,7 +178,7 @@ const App = () => {
                 <td style={{ border: "1px solid #ddd", padding: "8px" }}>{play.name}</td>
                 <td style={{ border: "1px solid #ddd", padding: "8px" }}>{play.date}</td>
                 <td style={{ border: "1px solid #ddd", padding: "8px" }}>
-                  {renderMoons(play.rating)}
+                  {renderRating(play.rating)}
                 </td>
               </tr>
             ))}
