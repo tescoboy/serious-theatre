@@ -52,6 +52,11 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
     setEditedPlay(null);
   };
 
+  const handleDelete = () => {
+    onDeletePlay(selectedPlay.id); // Delete the selected play
+    setSelectedPlay(null); // Close the overlay after deleting
+  };
+
   const renderPlayActions = (play) => (
     <div style={{ display: "flex", gap: "10px" }}>
       <button
@@ -166,9 +171,16 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
                 Save
               </button>
               <button
-                onClick={handleOverlayClose}
+                onClick={handleDelete}
                 className="button delete"
                 style={{ backgroundColor: "#DC3545", color: "white" }}
+              >
+                Delete
+              </button>
+              <button
+                onClick={handleOverlayClose}
+                className="button delete"
+                style={{ backgroundColor: "#6c757d", color: "white" }}
               >
                 Close
               </button>
