@@ -6,6 +6,7 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
   const [selectedPlay, setSelectedPlay] = useState(null); // For editing overlay
   const [editedPlay, setEditedPlay] = useState(null); // Store updated play during editing
 
+  // Filtered data
   const totalPlays = plays.length;
   const totalThisYear = plays.filter(
     (play) => new Date(play.date).getFullYear() === new Date().getFullYear()
@@ -62,22 +63,27 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
 
     switch (currentState) {
       case "empty":
+        // If it's empty, change to full moon
         setEditedPlay((prev) => {
-          const newRating = position + 1;
+          const newRating = position + 1;  // Move to the next moon position
           console.log("Setting new rating (empty -> full):", newRating); // Log the new rating
           return { ...prev, rating: newRating };
         });
         break;
+
       case "full":
+        // If it's full, change to half moon
         setEditedPlay((prev) => {
-          const newRating = position + 0.5;
+          const newRating = position + 0.5;  // Add a half moon
           console.log("Setting new rating (full -> half):", newRating); // Log the new rating
           return { ...prev, rating: newRating };
         });
         break;
+
       case "half":
+        // If it's half, reset back to empty
         setEditedPlay((prev) => {
-          const newRating = position;
+          const newRating = position;  // Reset back to empty moon
           console.log("Setting new rating (half -> empty):", newRating); // Log the new rating
           return { ...prev, rating: newRating };
         });
@@ -88,14 +94,14 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
   };
 
   const getMoonState = (position) => {
-    const fullMoons = Math.floor(editedPlay.rating); // Calculate full moons
-    const hasHalf = editedPlay.rating % 1 !== 0; // Check if half moon is needed
+    const fullMoons = Math.floor(editedPlay.rating); // Full moons based on integer part of rating
+    const hasHalf = editedPlay.rating % 1 !== 0; // Check if the rating has a half moon
 
-    console.log("Getting moon state for position:", position); // Log the current position
+    console.log("Getting moon state for position:", position); // Log the position being evaluated
 
-    if (position < fullMoons) return "full"; // Full moons
-    if (position === fullMoons && hasHalf) return "half"; // Half moon
-    return "empty"; // Empty moons
+    if (position < fullMoons) return "full";  // If the position is less than the full moons, it's full
+    if (position === fullMoons && hasHalf) return "half"; // If the position is the next one and there is a half, it's half
+    return "empty"; // Otherwise, it's empty
   };
 
   const getRatingText = (rating) => {
