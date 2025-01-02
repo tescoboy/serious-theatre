@@ -40,12 +40,13 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
       <button
         onClick={() => handleEditClick(play)}
         style={{
-          backgroundColor: "#007BFF",
+          backgroundColor: "#4A90E2", // Modern blue color
           color: "white",
           border: "none",
-          padding: "5px 10px",
-          borderRadius: "5px",
+          padding: "8px 16px",
+          borderRadius: "8px",
           cursor: "pointer",
+          fontSize: "14px",
         }}
       >
         Edit
@@ -53,12 +54,13 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
       <button
         onClick={() => onDeletePlay(play.id)}
         style={{
-          backgroundColor: "#DC3545",
+          backgroundColor: "#E94E77", // Soft red color
           color: "white",
           border: "none",
-          padding: "5px 10px",
-          borderRadius: "5px",
+          padding: "8px 16px",
+          borderRadius: "8px",
           cursor: "pointer",
+          fontSize: "14px",
         }}
       >
         Delete
@@ -69,24 +71,26 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
   const renderTile = (title, data) => (
     <div
       style={{
-        border: "1px solid #ddd",
+        backgroundColor: "#F4F4F9", // Soft light gray background
         padding: "20px",
-        borderRadius: "10px",
-        backgroundColor: "#f9f9f9",
-        boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+        borderRadius: "12px",
+        boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.1)",
+        marginBottom: "20px", // Space between tiles
       }}
     >
-      <h3>{title}</h3>
-      <ul>
+      <h3 style={{ fontSize: "20px", color: "#333", fontWeight: "600" }}>{title}</h3>
+      <ul style={{ listStyle: "none", padding: 0 }}>
         {data.length > 0 ? (
           data.map((play) => (
             <li
               key={play.id}
               style={{
-                marginBottom: "10px",
+                marginBottom: "15px",
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
+                fontSize: "16px",
+                color: "#555",
               }}
             >
               <span>
@@ -96,26 +100,35 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
             </li>
           ))
         ) : (
-          <p>No plays available.</p>
+          <p style={{ color: "#777" }}>No plays available.</p>
         )}
       </ul>
     </div>
   );
 
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px" }}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column", // Stacking tiles vertically
+        gap: "30px", // Add space between tiles
+        padding: "40px",
+        backgroundColor: "#FAFAFA", // Light background for the entire dashboard
+        fontFamily: "'Roboto', sans-serif", // Modern font family
+      }}
+    >
       {/* Summary Tiles */}
       <div style={{ textAlign: "center" }}>
-        <h3>Total Plays Seen</h3>
-        <p>{totalPlays}</p>
+        <h3 style={{ fontSize: "22px", color: "#333", fontWeight: "600" }}>Total Plays Seen</h3>
+        <p style={{ fontSize: "18px", color: "#4A4A4A" }}>{totalPlays}</p>
       </div>
       <div style={{ textAlign: "center" }}>
-        <h3>Total This Year</h3>
-        <p>{totalThisYear}</p>
+        <h3 style={{ fontSize: "22px", color: "#333", fontWeight: "600" }}>Total This Year</h3>
+        <p style={{ fontSize: "18px", color: "#4A4A4A" }}>{totalThisYear}</p>
       </div>
       <div style={{ textAlign: "center" }}>
-        <h3>Total This Month</h3>
-        <p>{totalThisMonth}</p>
+        <h3 style={{ fontSize: "22px", color: "#333", fontWeight: "600" }}>Total This Month</h3>
+        <p style={{ fontSize: "18px", color: "#4A4A4A" }}>{totalThisMonth}</p>
       </div>
 
       {/* Detailed Tiles */}
@@ -143,17 +156,30 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
             style={{
               backgroundColor: "white",
               padding: "20px",
-              borderRadius: "10px",
-              boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+              borderRadius: "12px",
+              boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.1)",
               width: "400px",
             }}
           >
-            <h3>Edit Play</h3>
-            <p>
+            <h3 style={{ fontSize: "22px", color: "#333", fontWeight: "600" }}>Edit Play</h3>
+            <p style={{ fontSize: "16px", color: "#555" }}>
               <strong>{selectedPlay.name}</strong> ({selectedPlay.date})
             </p>
             {/* Editing logic (input fields) */}
-            <button onClick={handleOverlayClose}>Close</button>
+            <button
+              onClick={handleOverlayClose}
+              style={{
+                backgroundColor: "#E94E77", // Soft red color
+                color: "white",
+                border: "none",
+                padding: "8px 16px",
+                borderRadius: "8px",
+                cursor: "pointer",
+                fontSize: "14px",
+              }}
+            >
+              Close
+            </button>
           </div>
         </div>
       )}
