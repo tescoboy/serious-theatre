@@ -1,39 +1,26 @@
-import InputSection from './components/InputSection';
-import Dashboard from './components/Dashboard';
-
-
 import React, { useState } from "react";
-import InputSection from "./InputSection";
-import Dashboard from "./Dashboard";
+import InputSection from "./components/InputSection";
+import Dashboard from "./components/Dashboard";
 
 const App = () => {
   const [plays, setPlays] = useState([]);
 
-  const addPlay = (newPlay) => {
-    setPlays((prevPlays) => [...prevPlays, newPlay]);
+  const handleAddPlay = (newPlay) => {
+    setPlays([...plays, newPlay]);
   };
 
-  const editPlay = (editedPlay) => {
-    setPlays((prevPlays) =>
-      prevPlays.map((play) =>
-        play.id === editedPlay.id ? editedPlay : play
-      )
+  const handleEditPlay = (updatedPlay) => {
+    const updatedPlays = plays.map((play) =>
+      play.id === updatedPlay.id ? updatedPlay : play
     );
-  };
-
-  const deletePlay = (id) => {
-    setPlays((prevPlays) => prevPlays.filter((play) => play.id !== id));
+    setPlays(updatedPlays);
   };
 
   return (
-    <div>
+    <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
       <h1>Serious Theatre</h1>
-      <InputSection onAddPlay={addPlay} />
-      <Dashboard
-        plays={plays}
-        onEditPlay={editPlay}
-        onDeletePlay={deletePlay}
-      />
+      <InputSection onAddPlay={handleAddPlay} />
+      <Dashboard plays={plays} onEditPlay={handleEditPlay} />
     </div>
   );
 };
