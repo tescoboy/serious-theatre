@@ -74,11 +74,11 @@ const App = () => {
               onClick={() => handleMoonClick(position)}
               style={{
                 fontSize: "30px",
-                color: state === "empty" ? "#ccc" : "#f0c419",
+                color: rating === 6 ? "#32CD32" : state === "empty" ? "#ccc" : "#f0c419",
                 position: "relative",
               }}
             >
-              {state === "full" ? "🌕" : state === "half" ? "🌗" : "🌑"}
+              {state === "full" || rating === 6 ? "🌕" : state === "half" ? "🌗" : "🌑"}
             </span>
           );
         })}
