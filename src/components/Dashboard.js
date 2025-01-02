@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import "./index.css"; // Import the CSS file
+import "../index.css"; // Path to go up one level and reference index.css
+
 
 const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
   const [selectedPlay, setSelectedPlay] = useState(null); // For editing overlay
