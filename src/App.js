@@ -87,7 +87,8 @@ const App = () => {
           style={{
             fontSize: "30px",
             cursor: "pointer",
-            color: rating === 6 ? "#32CD32" : "#ccc",
+            color: rating === 6 ? "#32CD32" : "#ccc", // Highlight when selected
+            fontWeight: rating === 6 ? "bold" : "normal",
           }}
         >
           🕺
@@ -98,7 +99,7 @@ const App = () => {
 
   // Render moons and standing ovation for display in the table
   const renderRating = (rating) => {
-    if (rating === 6) return "🕺 Standing Ovation";
+    if (rating === 6) return "🕺"; // Only show icon for Standing Ovation
     const fullMoons = Math.floor(rating);
     const hasHalfMoon = rating % 1 !== 0;
     const moons = Array(fullMoons).fill("🌕");
@@ -177,9 +178,7 @@ const App = () => {
               <tr key={play.id}>
                 <td style={{ border: "1px solid #ddd", padding: "8px" }}>{play.name}</td>
                 <td style={{ border: "1px solid #ddd", padding: "8px" }}>{play.date}</td>
-                <td style={{ border: "1px solid #ddd", padding: "8px" }}>
-                  {renderRating(play.rating)}
-                </td>
+                <td style={{ border: "1px solid #ddd", padding: "8px" }}>{renderRating(play.rating)}</td>
               </tr>
             ))}
           </tbody>
