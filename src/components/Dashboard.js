@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
   const [selectedPlay, setSelectedPlay] = useState(null); // For editing overlay
+  const [editedPlay, setEditedPlay] = useState(null); // Store updated play during editing
 
   // Filtered data
   const totalPlays = plays.length;
@@ -29,10 +30,26 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
   // Edit overlay
   const handleEditClick = (play) => {
     setSelectedPlay(play);
+    setEditedPlay({ ...play }); // Create a copy for editing
   };
 
   const handleOverlayClose = () => {
     setSelectedPlay(null);
+    setEditedPlay(null);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditedPlay((prevPlay) => ({
+      ...prevPlay,
+      [name]: value,
+    }));
+  };
+
+  const handleSave = () => {
+    onEditPlay(editedPlay);
+    setSelectedPlay(null); // Close overlay after saving
+    setEditedPlay(null);
   };
 
   const renderPlayActions = (play) => (
@@ -93,12 +110,69 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
         <div className="overlay">
           <div className="overlay-content">
             <h3>Edit Play</h3>
-            <p>
-              <strong>{selectedPlay.name}</strong> ({selectedPlay.date})
-            </p>
-            {/* Add form inputs to edit the play */}
-            <button onClick={() => onDeletePlay(selectedPlay.id)}>Delete</button>
-            <button onClick={handleOverlayClose}>Close</button>
+
+            <div style={{ marginBottom: "10px" }}>
+              <label>
+                Play Name:
+                <input
+                  type="text"
+                  name="name"
+                  value={editedPlay.name}
+                  onChange={handleInputChange}
+                  style={{ padding: "5px", width: "100%" }}
+                />
+              </label>
+            </div>
+
+            <div style={{ marginBottom: "10px" }}>
+              <label>
+                Play Date:
+                <input
+                  type="date"
+                  name="date"
+                  value={editedPlay.date}
+                  onChange={handleInputChange}
+                  style={{ padding: "5px", width: "100%" }}
+                />
+              </label>
+            </div>
+
+            <div style={{ marginBottom: "10px" }}>
+              <label>
+                Rating:
+                <select
+                  name="rating"
+                  value={editedPlay.rating}
+                  onChange={handleInputChange}
+                  style={{ padding: "5px", width: "100%" }}
+                >
+                  <option value={0}>Unrated</option>
+                  <option value={1}>🌑</option>
+                  <option value={2}>🌗</option>
+                  <option value={3}>🌕</option>
+                  <option value={4}>🌕🌕</option>
+                  <option value={5}>🌕🌕🌕</option>
+                  <option value={6}>🕺</option>
+                </select>
+              </label>
+            </div>
+
+            <div style={{ display: "flex", gap: "10px", marginTop: "20px" }}>
+              <button
+                onClick={handleSave}
+                className="button edit"
+                style={{ backgroundColor: "#4CAF50", color: "white" }}
+              >
+                Save
+              </button>
+              <button
+                onClick={handleOverlayClose}
+                className="button delete"
+                style={{ backgroundColor: "#DC3545", color: "white" }}
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}
