@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Card, CardContent, Typography, Box, Select, MenuItem, TextField } from "@mui/material";
+import { Button, Card, CardContent, Typography, Box, TextField } from "@mui/material";
 import { Edit } from '@mui/icons-material';
 
 const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
@@ -50,6 +50,7 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
 
   // Handle ranking change (for editing)
   const handleRatingChange = (position) => {
+    // Prevent changes if readonly
     if (editedPlay.readonly) return;
 
     const currentState = getMoonState(position);
@@ -73,19 +74,19 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
     const fullMoons = Math.floor(editedPlay.rating);
     const hasHalf = editedPlay.rating % 1 !== 0;
 
-    if (position < fullMoons) return "full";
-    if (position === fullMoons && hasHalf) return "half";
-    return "empty";
+    if (position < fullMoons) return "full"; // For full moons
+    if (position === fullMoons && hasHalf) return "half"; // For half moons
+    return "empty"; // For empty moons
   };
 
   const getRatingText = (rating) => {
-    if (rating === 6) return "🕺 (Standing Ovation)";
+    if (rating === 6) return "🕺 (Standing Ovation)"; // Standing Ovation
     const fullMoons = Math.floor(rating);
     const hasHalfMoon = rating % 1 !== 0;
     const moons = Array(fullMoons).fill("🌕");
     if (hasHalfMoon) moons.push("🌗");
     while (moons.length < 5) moons.push("🌑");
-    return moons.join(" ");
+    return moons.join(" "); // Returning the combined moons
   };
 
   const handleSave = () => {
