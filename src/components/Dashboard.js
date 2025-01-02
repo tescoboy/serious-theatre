@@ -68,11 +68,8 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
   };
 
   const renderPlayActions = (play) => (
-    <div style={{ display: "flex", gap: "10px" }}>
-      <button
-        onClick={() => handleEditClick(play)}
-        className="button button--edit"
-      >
+    <div className="button-container">
+      <button onClick={() => handleEditClick(play)} className="button button--edit">
         Edit
       </button>
     </div>
@@ -133,6 +130,7 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
                   name="name"
                   value={editedPlay.name}
                   onChange={handleInputChange}
+                  className="input"
                 />
               </label>
             </div>
@@ -144,6 +142,7 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
                   name="date"
                   value={editedPlay.date}
                   onChange={handleInputChange}
+                  className="input"
                 />
               </label>
             </div>
@@ -155,11 +154,12 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
                   name="rating"
                   value={editedPlay.rating}
                   onChange={handleInputChange}
+                  className="input"
                 />
               </label>
             </div>
-            <div>
-              <button onClick={handleSaveEdit} className="button button--edit">
+            <div className="button-group">
+              <button onClick={handleSaveEdit} className="button button--save">
                 Save Changes
               </button>
               <button onClick={handleDeletePlay} className="button button--delete">
