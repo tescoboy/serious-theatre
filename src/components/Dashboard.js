@@ -6,7 +6,6 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
   const [selectedPlay, setSelectedPlay] = useState(null); // For editing overlay
   const [editedPlay, setEditedPlay] = useState(null); // Store updated play during editing
 
-  // Filtered data
   const totalPlays = plays.length;
   const totalThisYear = plays.filter(
     (play) => new Date(play.date).getFullYear() === new Date().getFullYear()
@@ -105,7 +104,10 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
 
   const getRatingText = (rating) => {
     console.log("Getting rating text for:", rating); // Log the rating being processed
-    if (rating === 6) return "🕺 (Standing Ovation)";  // Standing Ovation icon for rating of 6
+
+    if (rating === 6) {
+      return "🕺";  // Only show standing ovation for rating 6
+    }
 
     const fullMoons = Math.floor(rating); // Full moons
     const hasHalfMoon = rating % 1 !== 0;  // Check for half moon
