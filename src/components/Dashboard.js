@@ -5,29 +5,6 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
   const [selectedPlay, setSelectedPlay] = useState(null); // For editing overlay
   const [editedPlay, setEditedPlay] = useState(null); // To track changes to the play being edited
 
-  // Filtered data
-  const totalPlays = plays.length;
-  const totalThisYear = plays.filter(
-    (play) => new Date(play.date).getFullYear() === new Date().getFullYear()
-  ).length;
-  const totalThisMonth = plays.filter((play) => {
-    const playDate = new Date(play.date);
-    const now = new Date();
-    return (
-      playDate.getFullYear() === now.getFullYear() &&
-      playDate.getMonth() === now.getMonth()
-    );
-  }).length;
-
-  const upcomingPlays = plays.filter((play) => new Date(play.date) > new Date());
-  const recentPlays = plays
-    .filter((play) => new Date(play.date) <= new Date())
-    .sort((a, b) => new Date(b.date) - new Date(a.date))
-    .slice(0, 6);
-
-  const hallOfFame = plays.filter((play) => play.rating === 5 || play.rating === 6);
-  const unratedPlays = plays.filter((play) => play.rating === 0);
-
   // Handle Edit Click
   const handleEditClick = (play) => {
     setSelectedPlay(play);
@@ -100,22 +77,11 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
       {/* Summary Tiles */}
       <div className="dashboard__summary">
         <h3>Total Plays Seen</h3>
-        <p>{totalPlays}</p>
-      </div>
-      <div className="dashboard__summary">
-        <h3>Total This Year</h3>
-        <p>{totalThisYear}</p>
-      </div>
-      <div className="dashboard__summary">
-        <h3>Total This Month</h3>
-        <p>{totalThisMonth}</p>
+        <p>{plays.length}</p>
       </div>
 
       {/* Detailed Tiles */}
-      {renderTile("Upcoming Plays", upcomingPlays)}
-      {renderTile("Recent Plays", recentPlays)}
-      {renderTile("Hall of Fame", hallOfFame)}
-      {renderTile("Unrated Plays", unratedPlays)}
+      {renderTile("Upcoming Plays", plays.filter((play) => new Date(play.date) > new Date()))}
 
       {/* Edit Overlay */}
       {selectedPlay && (
@@ -154,7 +120,7 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
                   name="rating"
                   value={editedPlay.rating}
                   onChange={handleInputChange}
-                  className="input ranking-input"
+                  className="input"
                   min="0"
                   max="6"
                 />
