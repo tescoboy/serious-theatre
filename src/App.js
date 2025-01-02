@@ -45,14 +45,23 @@ const TheatreApp = () => {
       return;
     }
 
-    setPlays((prevPlays) => [
-      ...prevPlays,
-      { id: Date.now(), name: playName.trim(), date: playDate, rating },
-    ]);
+    const newPlay = {
+      id: Date.now(),
+      name: playName.trim(),
+      date: playDate,
+      rating,
+    };
 
+    setPlays((prevPlays) => [...prevPlays, newPlay]);
     setPlayName('');
     setPlayDate('');
     setRating(0);
+  };
+
+  const stats = {
+    totalPlays: plays.length,
+    upcomingPlays: plays.filter((play) => new Date(play.date) > new Date()).length,
+    hallOfFame: plays.filter((play) => play.rating === 6).length,
   };
 
   return (
@@ -97,6 +106,16 @@ const TheatreApp = () => {
           <button type="submit">Add Play</button>
         </form>
       </div>
+
+      <div>
+        <h2>Dashboard</h2>
+        <div>
+          <p>Total Plays: {stats.totalPlays}</p>
+          <p>Upcoming Plays: {stats.upcomingPlays}</p>
+          <p>Hall of Fame: {stats.hallOfFame}</p>
+        </div>
+      </div>
+
       <div>
         <h2>All Plays</h2>
         <ul>
