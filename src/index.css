@@ -1,6 +1,123 @@
+/* General Styles */
 body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #fafafa; /* Light background for the entire dashboard */
   margin: 0;
-  font-family: Arial, sans-serif;
-  background-color: #121212;
-  color: #ffffff;
+  padding: 0;
+}
+
+/* Tile Styles */
+.tile {
+  background-color: #f4f4f9; /* Soft light gray background */
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px; /* Space between tiles */
+}
+
+.tile h3 {
+  font-size: 20px;
+  color: #333;
+  font-weight: 600;
+}
+
+.tile ul {
+  list-style: none;
+  padding: 0;
+}
+
+.tile li {
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 16px;
+  color: #555;
+}
+
+.tile p {
+  color: #777;
+}
+
+/* Button Styles */
+.button {
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  border: none;
+}
+
+.button--edit {
+  background-color: #4a90e2; /* Modern blue color */
+  color: white;
+}
+
+.button--delete {
+  background-color: #e94e77; /* Soft red color */
+  color: white;
+}
+
+.button--close {
+  background-color: #e94e77; /* Soft red color */
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* Overlay Styles */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.overlay__content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+  width: 400px;
+}
+
+.overlay__content h3 {
+  font-size: 22px;
+  color: #333;
+  font-weight: 600;
+}
+
+.overlay__content p {
+  font-size: 16px;
+  color: #555;
+}
+
+/* Layout Styles */
+.dashboard {
+  display: flex;
+  flex-direction: column; /* Stacking tiles vertically */
+  gap: 30px; /* Add space between tiles */
+  padding: 40px;
+}
+
+.dashboard__summary {
+  text-align: center;
+}
+
+.dashboard__summary h3 {
+  font-size: 22px;
+  color: #333;
+  font-weight: 600;
+}
+
+.dashboard__summary p {
+  font-size: 18px;
+  color: #4a4a4a;
 }
