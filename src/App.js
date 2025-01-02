@@ -1,28 +1,114 @@
-import React, { useState } from "react";
-import InputSection from "./components/InputSection";
-import Dashboard from "./components/Dashboard";
+import React, { useState } from 'react';
 
-const App = () => {
+const TheatreApp = () => {
   const [plays, setPlays] = useState([]);
+  const [playName, setPlayName] = useState('');
+  const [playDate, setPlayDate] = useState('');
+  const [rating, setRating] = useState(0);
 
-  const handleAddPlay = (newPlay) => {
-    setPlays([...plays, newPlay]);
+  const handleMoonClick = (index) => {
+    const clickedRating = index + 1;
+    if (rating === clickedRating) {
+      setRating(clickedRating - 0.5);
+    } else {
+      setRating(clickedRating);
+    }
   };
 
-  const handleEditPlay = (updatedPlay) => {
-    const updatedPlays = plays.map((play) =>
-      play.id === updatedPlay.id ? updatedPlay : play
+  const handleStandingOvationClick = () => {
+    setRating(6);
+  };
+
+  const renderMoon = (index) => {
+    const isHalf = rating === index + 0.5;
+    const isFull = rating >= index + 1;
+
+    return (
+      <span
+        key={index}
+        onClick={() => handleMoonClick(index)}
+        style={{
+          fontSize: '24px',
+          cursor: 'pointer',
+          color: isFull || isHalf ? 'yellow' : 'gray',
+        }}
+      >
+        🌙
+      </span>
     );
-    setPlays(updatedPlays);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!playName.trim() || !playDate) {
+      alert('Please fill in both the play name and date.');
+      return;
+    }
+
+    setPlays((prevPlays) => [
+      ...prevPlays,
+      { id: Date.now(), name: playName.trim(), date: playDate, rating },
+    ]);
+
+    setPlayName('');
+    setPlayDate('');
+    setRating(0);
   };
 
   return (
-    <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
-      <h1>Serious Theatre</h1>
-      <InputSection onAddPlay={handleAddPlay} />
-      <Dashboard plays={plays} onEditPlay={handleEditPlay} />
+    <div>
+      <h1>Theatre Tracker</h1>
+      <div>
+        <h2>Add New Play</h2>
+        <form onSubmit={handleSubmit}>
+          <div>
+            <label>Play Name:</label>
+            <input
+              type="text"
+              value={playName}
+              onChange={(e) => setPlayName(e.target.value)}
+            />
+          </div>
+          <div>
+            <label>Play Date:</label>
+            <input
+              type="date"
+              value={playDate}
+              onChange={(e) => setPlayDate(e.target.value)}
+            />
+          </div>
+          <div>
+            <label>Rating:</label>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              {[...Array(5)].map((_, index) => renderMoon(index))}
+              <span
+                onClick={handleStandingOvationClick}
+                style={{
+                  fontSize: '24px',
+                  cursor: 'pointer',
+                  color: rating === 6 ? 'yellow' : 'gray',
+                  marginLeft: '8px',
+                }}
+              >
+                🕴️
+              </span>
+            </div>
+          </div>
+          <button type="submit">Add Play</button>
+        </form>
+      </div>
+      <div>
+        <h2>All Plays</h2>
+        <ul>
+          {plays.map((play) => (
+            <li key={play.id}>
+              {play.name} - {play.date} - {play.rating === 6 ? '🕴️' : `${play.rating} 🌙`}
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };
 
-export default App;
+export default TheatreApp;
