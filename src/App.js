@@ -33,12 +33,58 @@ const App = () => {
     setRating(0);
   };
 
-  // Render moons for the rating
+  // Handle moon click for rating
+  const handleMoonClick = (position) => {
+    const currentState = getMoonState(position);
+    if (currentState === "empty") {
+      setRating(position + 1);
+    } else if (currentState === "full") {
+      setRating(position + 0.5);
+    } else if (currentState === "half") {
+      setRating(position);
+    }
+  };
+
+  // Determine the current state of a moon (full, half, empty)
+  const getMoonState = (position) => {
+    const fullMoons = Math.floor(rating);
+    const hasHalfMoon = rating % 1 !== 0;
+    if (position < fullMoons) return "full";
+    if (position === fullMoons && hasHalfMoon) return "half";
+    return "empty";
+  };
+
+  // Render moons for rating input
+  const renderMoonInput = () => {
+    return (
+      <div style={{ display: "flex", gap: "10px", cursor: "pointer" }}>
+        {[0, 1, 2, 3, 4].map((position) => {
+          const state = getMoonState(position);
+          return (
+            <span
+              key={position}
+              onClick={() => handleMoonClick(position)}
+              style={{
+                fontSize: "30px",
+                color: state === "empty" ? "#ccc" : "#f0c419",
+                position: "relative",
+              }}
+            >
+              {state === "full" ? "🌕" : state === "half" ? "🌗" : "🌑"}
+            </span>
+          );
+        })}
+      </div>
+    );
+  };
+
+  // Render moons for display in the table
   const renderMoons = (rating) => {
     const fullMoons = Math.floor(rating);
     const hasHalfMoon = rating % 1 !== 0;
     const moons = Array(fullMoons).fill("🌕");
     if (hasHalfMoon) moons.push("🌗");
+    while (moons.length < 5) moons.push("🌑");
     return moons.join(" ");
   };
 
@@ -72,36 +118,8 @@ const App = () => {
           </label>
         </div>
         <div style={{ marginTop: "10px" }}>
-          <label>
-            Rating:
-            <div style={{ marginLeft: "10px", display: "inline-block" }}>
-              {[1, 2, 3, 4, 5].map((num) => (
-                <span
-                  key={num}
-                  onClick={() => setRating(num)}
-                  style={{
-                    cursor: "pointer",
-                    fontSize: "20px",
-                    marginRight: "5px",
-                    color: num <= rating ? "gold" : "gray",
-                  }}
-                >
-                  🌕
-                </span>
-              ))}
-              <span
-                onClick={() => setRating(rating === 0.5 ? 0 : rating + 0.5)}
-                style={{
-                  cursor: "pointer",
-                  fontSize: "20px",
-                  marginRight: "5px",
-                  color: rating % 1 !== 0 ? "gold" : "gray",
-                }}
-              >
-                🌗
-              </span>
-            </div>
-          </label>
+          <label>Rating:</label>
+          {renderMoonInput()}
         </div>
         <button
           type="submit"
