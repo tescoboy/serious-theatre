@@ -6,7 +6,6 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
   const [selectedPlay, setSelectedPlay] = useState(null); // For editing overlay
   const [editedPlay, setEditedPlay] = useState(null); // Store updated play during editing
 
-  // Filtered data
   const totalPlays = plays.length;
   const totalThisYear = plays.filter(
     (play) => new Date(play.date).getFullYear() === new Date().getFullYear()
@@ -33,6 +32,7 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
   const handleEditClick = (play) => {
     setSelectedPlay(play);
     setEditedPlay({ ...play }); // Create a copy for editing
+    console.log("Editing play:", play); // Log the play being edited
   };
 
   const handleOverlayClose = () => {
@@ -46,6 +46,7 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
       ...prevPlay,
       [name]: value,
     }));
+    console.log(`Updated field ${name}:`, value); // Log changes to the fields
   };
 
   // Handle ranking change (for editing)
@@ -55,15 +56,31 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
 
     const currentState = getMoonState(position);
 
+    // Log the moon state before making a change
+    console.log("Moon clicked, current state:", currentState);
+    console.log("Current rating before change:", editedPlay.rating);
+
     switch (currentState) {
       case "empty":
-        setEditedPlay((prev) => ({ ...prev, rating: position + 1 }));
+        setEditedPlay((prev) => {
+          const newRating = position + 1;
+          console.log("Setting new rating (empty -> full):", newRating); // Log the new rating
+          return { ...prev, rating: newRating };
+        });
         break;
       case "full":
-        setEditedPlay((prev) => ({ ...prev, rating: position + 0.5 }));
+        setEditedPlay((prev) => {
+          const newRating = position + 0.5;
+          console.log("Setting new rating (full -> half):", newRating); // Log the new rating
+          return { ...prev, rating: newRating };
+        });
         break;
       case "half":
-        setEditedPlay((prev) => ({ ...prev, rating: position }));
+        setEditedPlay((prev) => {
+          const newRating = position;
+          console.log("Setting new rating (half -> empty):", newRating); // Log the new rating
+          return { ...prev, rating: newRating };
+        });
         break;
       default:
         break;
@@ -71,29 +88,34 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
   };
 
   const getMoonState = (position) => {
-    const fullMoons = Math.floor(editedPlay.rating);
-    const hasHalf = editedPlay.rating % 1 !== 0;
+    const fullMoons = Math.floor(editedPlay.rating); // Calculate full moons
+    const hasHalf = editedPlay.rating % 1 !== 0; // Check if half moon is needed
 
-    if (position < fullMoons) return "full"; // For full moons
-    if (position === fullMoons && hasHalf) return "half"; // For half moons
-    return "empty"; // For empty moons
+    console.log("Getting moon state for position:", position); // Log the current position
+
+    if (position < fullMoons) return "full"; // Full moons
+    if (position === fullMoons && hasHalf) return "half"; // Half moon
+    return "empty"; // Empty moons
   };
 
   const getRatingText = (rating) => {
-    if (rating === 6) return "🕺 (Standing Ovation)"; // Standing Ovation
-    const fullMoons = Math.floor(rating);
-    const hasHalfMoon = rating % 1 !== 0;
-    const moons = Array(fullMoons).fill("🌕");
-    if (hasHalfMoon) moons.push("🌗");
-    while (moons.length < 5) moons.push("🌑");
-    return moons.join(" "); // Returning the combined moons
+    console.log("Getting rating text for:", rating); // Log the rating being processed
+    if (rating === 6) return "🕺 (Standing Ovation)";  // Standing Ovation icon for rating of 6
+
+    const fullMoons = Math.floor(rating); // Full moons
+    const hasHalfMoon = rating % 1 !== 0;  // Check for half moon
+    const moons = Array(fullMoons).fill("🌕");  // Add full moons
+    if (hasHalfMoon) moons.push("🌗");  // Add half moon if applicable
+    while (moons.length < 5) moons.push("🌑");  // Add empty moons if necessary
+    return moons.join(" ");  // Join all moons into a string
   };
 
   const handleSave = () => {
-    // Save edited play
-    onEditPlay(editedPlay);
-    setSelectedPlay(null); // Close overlay after saving
-    setEditedPlay(null);
+    // Log the final play state before saving
+    console.log("Saving play with rating:", editedPlay.rating);
+    onEditPlay(editedPlay);  // Save the edited play
+    setSelectedPlay(null);  // Close overlay after saving
+    setEditedPlay(null);  // Reset the edited play
   };
 
   const renderPlayActions = (play) => (
