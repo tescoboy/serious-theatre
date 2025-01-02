@@ -50,6 +50,7 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
 
   // Handle ranking change (for editing)
   const handleRatingChange = (position) => {
+    // Prevent changes if readonly
     if (editedPlay.readonly) return;
 
     const currentState = getMoonState(position);
