@@ -1,3 +1,7 @@
+import InputSection from './components/InputSection';
+import Dashboard from './components/Dashboard';
+
+
 import React, { useState } from "react";
 import InputSection from "./InputSection";
 import Dashboard from "./Dashboard";
