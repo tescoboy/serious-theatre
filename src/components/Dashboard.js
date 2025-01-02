@@ -48,19 +48,20 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
     }));
   };
 
+  // Handle ranking change (for editing)
   const handleRatingChange = (position) => {
     if (editedPlay.readonly) return;
 
     const currentState = getMoonState(position);
-    
+
     switch (currentState) {
-      case 'empty':
+      case "empty":
         setEditedPlay((prev) => ({ ...prev, rating: position + 1 }));
         break;
-      case 'full':
+      case "full":
         setEditedPlay((prev) => ({ ...prev, rating: position + 0.5 }));
         break;
-      case 'half':
+      case "half":
         setEditedPlay((prev) => ({ ...prev, rating: position }));
         break;
       default:
@@ -72,9 +73,9 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
     const fullMoons = Math.floor(editedPlay.rating);
     const hasHalf = editedPlay.rating % 1 !== 0;
 
-    if (position < fullMoons) return 'full';
-    if (position === fullMoons && hasHalf) return 'half';
-    return 'empty';
+    if (position < fullMoons) return "full";
+    if (position === fullMoons && hasHalf) return "half";
+    return "empty";
   };
 
   const getRatingText = (rating) => {
@@ -199,6 +200,7 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
               sx={{ mb: 2 }}
             />
 
+            {/* Rating System */}
             <Box sx={{ display: "flex", gap: "10px", marginTop: "20px" }}>
               {[0, 1, 2, 3, 4].map((position) => (
                 <span
