@@ -1,81 +1,93 @@
 import React, { useState } from "react";
-import { Button, TextField, Box } from "@mui/material";
 
 const InputSection = ({ onAddPlay }) => {
-  const [newPlay, setNewPlay] = useState({
-    name: "",
-    date: "",
-    rating: 0, // No rating initially
-  });
+  const [playName, setPlayName] = useState("");
+  const [playDate, setPlayDate] = useState("");
+  const [rating, setRating] = useState(0); // Default rating: 0 (no moons filled)
+  const [standingOvation, setStandingOvation] = useState(false);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewPlay((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+  const handleMoonClick = (index) => {
+    if (standingOvation) setStandingOvation(false);
+    setRating(index + 1); // Full moons
+  };
+
+  const handleHalfMoonClick = (index) => {
+    if (standingOvation) setStandingOvation(false);
+    setRating(index + 0.5); // Half moons
+  };
+
+  const handleManClick = () => {
+    setStandingOvation(true);
+    setRating(5); // Standing Ovation is 5 moons
   };
 
   const handleAddPlay = () => {
-    if (!newPlay.name || !newPlay.date || newPlay.rating === 0) {
-      alert("Please enter valid name, date, and rating!");
+    if (!playName || !playDate) {
+      alert("Please fill in all fields.");
       return;
     }
-
-    const newPlayObject = {
+    const newPlay = {
       id: Date.now(),
-      name: newPlay.name,
-      date: newPlay.date,
-      rating: newPlay.rating,
+      name: playName,
+      date: playDate,
+      rating: standingOvation ? "Standing Ovation" : rating,
     };
-
-    onAddPlay(newPlayObject);
-
-    // Reset form after adding
-    setNewPlay({
-      name: "",
-      date: "",
-      rating: 0,
-    });
+    onAddPlay(newPlay);
+    setPlayName("");
+    setPlayDate("");
+    setRating(0);
+    setStandingOvation(false);
   };
 
   return (
     <div>
-      <TextField
-        label="Play Name"
-        name="name"
-        value={newPlay.name}
-        onChange={handleInputChange}
-        fullWidth
-        sx={{ marginBottom: 2 }}
-      />
-      <TextField
-        label="Play Date"
-        type="date"
-        name="date"
-        value={newPlay.date}
-        onChange={handleInputChange}
-        fullWidth
-        sx={{ marginBottom: 2 }}
-      />
-      <Box sx={{ display: "flex", gap: "10px", marginTop: "20px" }}>
-        {[0, 1, 2, 3, 4].map((position) => (
+      <h2>Add New Play</h2>
+      <div>
+        <label>Play Name:</label>
+        <input
+          type="text"
+          value={playName}
+          onChange={(e) => setPlayName(e.target.value)}
+        />
+      </div>
+      <div>
+        <label>Play Date:</label>
+        <input
+          type="date"
+          value={playDate}
+          onChange={(e) => setPlayDate(e.target.value)}
+        />
+      </div>
+      <div>
+        <label>Rating:</label>
+        <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+          {[...Array(5)].map((_, index) => (
+            <span
+              key={index}
+              style={{
+                fontSize: "24px",
+                cursor: "pointer",
+                color: rating >= index + 1 ? "yellow" : "grey",
+              }}
+              onClick={() => handleMoonClick(index)}
+              onDoubleClick={() => handleHalfMoonClick(index)}
+            >
+              🌕
+            </span>
+          ))}
           <span
-            key={position}
-            onClick={() => setNewPlay((prev) => ({ ...prev, rating: position + 1 }))}
             style={{
               fontSize: "24px",
               cursor: "pointer",
-              color: newPlay.rating > position ? "#FFD700" : "#D3D3D3",
+              color: standingOvation ? "purple" : "grey",
             }}
+            onClick={handleManClick}
           >
-            🌕
+            🕺
           </span>
-        ))}
-      </Box>
-      <Button onClick={handleAddPlay} variant="contained" color="primary">
-        Add Play
-      </Button>
+        </div>
+      </div>
+      <button onClick={handleAddPlay}>Add Play</button>
     </div>
   );
 };
