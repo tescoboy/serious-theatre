@@ -43,12 +43,6 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
       >
         Edit
       </button>
-      <button
-        onClick={() => onDeletePlay(play.id)}
-        className="button delete"
-      >
-        Delete
-      </button>
     </div>
   );
 
@@ -102,7 +96,8 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
             <p>
               <strong>{selectedPlay.name}</strong> ({selectedPlay.date})
             </p>
-            {/* Editing logic (input fields) */}
+            {/* Add form inputs to edit the play */}
+            <button onClick={() => onDeletePlay(selectedPlay.id)}>Delete</button>
             <button onClick={handleOverlayClose}>Close</button>
           </div>
         </div>
