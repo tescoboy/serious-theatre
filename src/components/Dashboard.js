@@ -43,26 +43,31 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
     }
   };
 
-  // Set all moons to filled (5 moons)
+  // Set all moons to filled (5 moons) - Standing Ovation
   const handleStandingOvation = () => {
-    setEditedPlay((prev) => ({ ...prev, rating: 5 }));
+    setEditedPlay((prev) => ({ ...prev, rating: 6 }));
   };
 
   // Get moon state (full, half, or empty)
   const getMoonState = (position) => {
-    const fullMoons = Math.floor(editedPlay.rating);
-    const hasHalf = editedPlay.rating % 1 !== 0;
-    if (position < fullMoons) return "full"; // Full moon
-    if (position === fullMoons && hasHalf) return "half"; // Half moon
-    return "empty"; // Empty moon
+    const fullMoons = Math.floor(editedPlay.rating); // Full moons based on integer part of rating
+    const hasHalf = editedPlay.rating % 1 !== 0; // Check if the rating has a half moon
+
+    if (position < fullMoons) return "full";  // If the position is less than the full moons, it's full
+    if (position === fullMoons && hasHalf) return "half"; // If the position is the next one and there is a half, it's half
+    return "empty"; // Otherwise, it's empty
   };
 
   const getRatingText = (rating) => {
-    const fullMoons = Math.floor(rating);
-    const hasHalfMoon = rating % 1 !== 0;
+    if (rating === 6) {
+      return "🕺";  // Standing Ovation icon for rating of 6 (highest rating)
+    }
+
+    const fullMoons = Math.floor(rating); // Full moons
+    const hasHalfMoon = rating % 1 !== 0;  // Check for half moon
     const moons = Array(fullMoons).fill("🌕");
     if (hasHalfMoon) moons.push("🌗");
-    while (moons.length < 5) moons.push("🌑");
+    while (moons.length < 5) moons.push("🌑"); // Fill empty moons if necessary
     return moons.join(" ");
   };
 
@@ -123,7 +128,7 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
                 style={{
                   fontSize: "24px",
                   cursor: "pointer",
-                  color: editedPlay.rating === 5 ? "#FFD700" : "#D3D3D3",
+                  color: editedPlay.rating === 6 ? "#FFD700" : "#D3D3D3",
                   margin: "0 5px",
                 }}
               >
