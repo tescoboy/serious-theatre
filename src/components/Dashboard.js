@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Button, Card, CardContent, Typography, TextField, Select, MenuItem, Box } from "@mui/material";
+import { Button, Card, CardContent, Typography, Box, Select, MenuItem } from "@mui/material";
+import { Edit, Delete } from '@mui/icons-material';
 
 const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
   const [selectedPlay, setSelectedPlay] = useState(null); // For editing overlay
@@ -58,27 +59,54 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
     setSelectedPlay(null); // Close the overlay after deleting
   };
 
+  const renderPlayActions = (play) => (
+    <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+      <Button
+        onClick={() => handleEditClick(play)}
+        variant="contained"
+        color="primary"
+        startIcon={<Edit />}
+        sx={{
+          borderRadius: "10px",
+          padding: "8px 16px",
+          fontSize: "14px",
+        }}
+      >
+        Edit
+      </Button>
+      <Button
+        onClick={() => handleDelete()}
+        variant="contained"
+        color="error"
+        startIcon={<Delete />}
+        sx={{
+          borderRadius: "10px",
+          padding: "8px 16px",
+          fontSize: "14px",
+        }}
+      >
+        Delete
+      </Button>
+    </div>
+  );
+
   const renderTile = (title, data) => (
-    <Card sx={{ minWidth: 275, marginBottom: "20px" }}>
+    <Card sx={{ minWidth: 275, marginBottom: "20px", borderRadius: "10px", boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)" }}>
       <CardContent>
-        <Typography variant="h5" component="div" sx={{ mb: 2, color: "#4CAF50" }}>
+        <Typography variant="h5" component="div" sx={{ mb: 2, color: "#FFC107" }}>
           {title}
         </Typography>
         <Box>
           {data.length > 0 ? (
             data.map((play) => (
-              <Box key={play.id} sx={{ marginBottom: "10px" }}>
-                <Typography variant="body1" component="div">
-                  <strong>{play.name}</strong> ({play.date})
+              <Box key={play.id} sx={{ marginBottom: "15px", padding: "10px", border: "1px solid #ddd", borderRadius: "8px" }}>
+                <Typography variant="h6" sx={{ fontWeight: "bold", marginBottom: "5px" }}>
+                  {play.name} ({play.date})
                 </Typography>
-                <Button
-                  onClick={() => handleEditClick(play)}
-                  variant="contained"
-                  color="primary"
-                  sx={{ marginTop: "10px" }}
-                >
-                  Edit
-                </Button>
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                  Rating: {getRatingText(play.rating)}
+                </Typography>
+                {renderPlayActions(play)}
               </Box>
             ))
           ) : (
@@ -91,28 +119,39 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
     </Card>
   );
 
+  // Function to convert rating number to text/emoji
+  const getRatingText = (rating) => {
+    if (rating === 6) return "🕺 (Standing Ovation)";
+    const fullMoons = Math.floor(rating);
+    const hasHalfMoon = rating % 1 !== 0;
+    const moons = Array(fullMoons).fill("🌕");
+    if (hasHalfMoon) moons.push("🌗");
+    while (moons.length < 5) moons.push("🌑");
+    return moons.join(" ");
+  };
+
   return (
-    <div>
+    <div style={{ margin: "20px" }}>
       {/* Summary Tiles */}
       <Box sx={{ display: "flex", justifyContent: "space-between", gap: "20px" }}>
         <Card sx={{ flex: 1 }}>
-          <CardContent>
+          <CardContent sx={{ backgroundColor: "#343a40", color: "white", borderRadius: "10px" }}>
             <Typography variant="h5" component="div">Total Plays Seen</Typography>
-            <Typography variant="h6">{totalPlays}</Typography>
+            <Typography variant="h6" sx={{ fontWeight: "bold" }}>{totalPlays}</Typography>
           </CardContent>
         </Card>
 
         <Card sx={{ flex: 1 }}>
-          <CardContent>
+          <CardContent sx={{ backgroundColor: "#343a40", color: "white", borderRadius: "10px" }}>
             <Typography variant="h5" component="div">Total This Year</Typography>
-            <Typography variant="h6">{totalThisYear}</Typography>
+            <Typography variant="h6" sx={{ fontWeight: "bold" }}>{totalThisYear}</Typography>
           </CardContent>
         </Card>
 
         <Card sx={{ flex: 1 }}>
-          <CardContent>
+          <CardContent sx={{ backgroundColor: "#343a40", color: "white", borderRadius: "10px" }}>
             <Typography variant="h5" component="div">Total This Month</Typography>
-            <Typography variant="h6">{totalThisMonth}</Typography>
+            <Typography variant="h6" sx={{ fontWeight: "bold" }}>{totalThisMonth}</Typography>
           </CardContent>
         </Card>
       </Box>
