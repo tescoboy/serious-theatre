@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Button, Card, CardContent, Typography, TextField, Select, MenuItem, Box } from "@mui/material";
 
 const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
   const [selectedPlay, setSelectedPlay] = useState(null); // For editing overlay
@@ -57,52 +58,64 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
     setSelectedPlay(null); // Close the overlay after deleting
   };
 
-  const renderPlayActions = (play) => (
-    <div style={{ display: "flex", gap: "10px" }}>
-      <button
-        onClick={() => handleEditClick(play)}
-        className="button edit"
-      >
-        Edit
-      </button>
-    </div>
-  );
-
   const renderTile = (title, data) => (
-    <div className="tile">
-      <h3>{title}</h3>
-      <ul>
-        {data.length > 0 ? (
-          data.map((play) => (
-            <li key={play.id}>
-              <span>
-                <strong>{play.name}</strong> ({play.date})
-              </span>
-              {renderPlayActions(play)}
-            </li>
-          ))
-        ) : (
-          <p>No plays available.</p>
-        )}
-      </ul>
-    </div>
+    <Card sx={{ minWidth: 275, marginBottom: "20px" }}>
+      <CardContent>
+        <Typography variant="h5" component="div" sx={{ mb: 2, color: "#4CAF50" }}>
+          {title}
+        </Typography>
+        <Box>
+          {data.length > 0 ? (
+            data.map((play) => (
+              <Box key={play.id} sx={{ marginBottom: "10px" }}>
+                <Typography variant="body1" component="div">
+                  <strong>{play.name}</strong> ({play.date})
+                </Typography>
+                <Button
+                  onClick={() => handleEditClick(play)}
+                  variant="contained"
+                  color="primary"
+                  sx={{ marginTop: "10px" }}
+                >
+                  Edit
+                </Button>
+              </Box>
+            ))
+          ) : (
+            <Typography variant="body2" color="text.secondary">
+              No plays available.
+            </Typography>
+          )}
+        </Box>
+      </CardContent>
+    </Card>
   );
 
   return (
-    <div className="dashboard-container">
+    <div>
       {/* Summary Tiles */}
-      <div className="tile">
-        <h3>Total Plays Seen</h3>
-        <p>{totalPlays}</p>
-      </div>
-      <div className="tile">
-        <h3>Total This Year</h3>
-        <p>{totalThisYear}</p>
-      </div>
-      <div className="tile">
-        <h3>Total This Month</h3>
-        <p>{totalThisMonth}</p>
-      </div>
+      <Box sx={{ display: "flex", justifyContent: "space-between", gap: "20px" }}>
+        <Card sx={{ flex: 1 }}>
+          <CardContent>
+            <Typography variant="h5" component="div">Total Plays Seen</Typography>
+            <Typography variant="h6">{totalPlays}</Typography>
+          </CardContent>
+        </Card>
+
+        <Card sx={{ flex: 1 }}>
+          <CardContent>
+            <Typography variant="h5" component="div">Total This Year</Typography>
+            <Typography variant="h6">{totalThisYear}</Typography>
+          </CardContent>
+        </Card>
+
+        <Card sx={{ flex: 1 }}>
+          <CardContent>
+            <Typography variant="h5" component="div">Total This Month</Typography>
+            <Typography variant="h6">{totalThisMonth}</Typography>
+          </CardContent>
+        </Card>
+      </Box>
 
       {/* Detailed Tiles */}
       {renderTile("Upcoming Plays", upcomingPlays)}
@@ -114,77 +127,67 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
       {selectedPlay && (
         <div className="overlay">
           <div className="overlay-content">
-            <h3>Edit Play</h3>
+            <Typography variant="h6" component="div" sx={{ mb: 2 }}>
+              Edit Play
+            </Typography>
 
-            <div style={{ marginBottom: "10px" }}>
-              <label>
-                Play Name:
-                <input
-                  type="text"
-                  name="name"
-                  value={editedPlay.name}
-                  onChange={handleInputChange}
-                  style={{ padding: "5px", width: "100%" }}
-                />
-              </label>
-            </div>
+            <TextField
+              label="Play Name"
+              name="name"
+              value={editedPlay.name}
+              onChange={handleInputChange}
+              fullWidth
+              sx={{ mb: 2 }}
+            />
 
-            <div style={{ marginBottom: "10px" }}>
-              <label>
-                Play Date:
-                <input
-                  type="date"
-                  name="date"
-                  value={editedPlay.date}
-                  onChange={handleInputChange}
-                  style={{ padding: "5px", width: "100%" }}
-                />
-              </label>
-            </div>
+            <TextField
+              label="Play Date"
+              type="date"
+              name="date"
+              value={editedPlay.date}
+              onChange={handleInputChange}
+              fullWidth
+              sx={{ mb: 2 }}
+            />
 
-            <div style={{ marginBottom: "10px" }}>
-              <label>
-                Rating:
-                <select
-                  name="rating"
-                  value={editedPlay.rating}
-                  onChange={handleInputChange}
-                  style={{ padding: "5px", width: "100%" }}
-                >
-                  <option value={0}>Unrated</option>
-                  <option value={1}>🌑</option>
-                  <option value={2}>🌗</option>
-                  <option value={3}>🌕</option>
-                  <option value={4}>🌕🌕</option>
-                  <option value={5}>🌕🌕🌕</option>
-                  <option value={6}>🕺</option>
-                </select>
-              </label>
-            </div>
+            <Select
+              name="rating"
+              value={editedPlay.rating}
+              onChange={handleInputChange}
+              fullWidth
+              sx={{ mb: 2 }}
+            >
+              <MenuItem value={0}>Unrated</MenuItem>
+              <MenuItem value={1}>🌑</MenuItem>
+              <MenuItem value={2}>🌗</MenuItem>
+              <MenuItem value={3}>🌕</MenuItem>
+              <MenuItem value={4}>🌕🌕</MenuItem>
+              <MenuItem value={5}>🌕🌕🌕</MenuItem>
+              <MenuItem value={6}>🕺</MenuItem>
+            </Select>
 
-            <div style={{ display: "flex", gap: "10px", marginTop: "20px" }}>
-              <button
+            <Box sx={{ display: "flex", gap: "10px", marginTop: "20px" }}>
+              <Button
                 onClick={handleSave}
-                className="button edit"
-                style={{ backgroundColor: "#4CAF50", color: "white" }}
+                variant="contained"
+                color="success"
               >
                 Save
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={handleDelete}
-                className="button delete"
-                style={{ backgroundColor: "#DC3545", color: "white" }}
+                variant="contained"
+                color="error"
               >
                 Delete
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={handleOverlayClose}
-                className="button delete"
-                style={{ backgroundColor: "#6c757d", color: "white" }}
+                variant="outlined"
               >
                 Close
-              </button>
-            </div>
+              </Button>
+            </Box>
           </div>
         </div>
       )}
