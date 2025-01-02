@@ -1,4 +1,79 @@
-/* Overlay and Inputs */
+/* General Styles */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+/* Tile styles */
+.tile {
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.tile h3 {
+  color: #4caf50;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.tile ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tile li {
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+
+.tile li span {
+  font-size: 14px;
+}
+
+.tile p {
+  color: #757575;
+}
+
+/* Button Styles */
+.button {
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.button.edit {
+  background-color: #ffc107;
+  color: white;
+  border: none;
+}
+
+.button.delete {
+  background-color: #f44336;
+  color: white;
+  border: none;
+}
+
+.button:focus {
+  outline: none;
+}
+
+/* Responsive Grid Layout */
+.dashboard-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+/* Overlay Styles */
 .overlay {
   position: fixed;
   top: 0;
@@ -11,58 +86,10 @@
   align-items: center;
 }
 
-.overlay__content {
-  background-color: #fff;
-  padding: 30px;
+.overlay-content {
+  background-color: white;
+  padding: 20px;
   border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   width: 400px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.overlay__content h3 {
-  font-size: 24px;
-  margin-bottom: 20px;
-  color: #333;
-  text-align: center;
-}
-
-.input,
-.ranking-input {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 15px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 16px;
-}
-
-.button {
-  padding: 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 16px;
-  border: none;
-}
-
-.button--save {
-  background-color: #4CAF50;
-  color: white;
-  margin-right: 10px;
-}
-
-.button--delete {
-  background-color: #E94E77;
-  color: white;
-}
-
-.button--close {
-  background-color: #ccc;
-  color: white;
-  margin-top: 10px;
-  width: 100%;
-}
-
-.button-group {
-  display: flex;
-  justify-content: space-between;
 }
