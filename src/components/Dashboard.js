@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Card, CardContent, Typography, Box, Select, MenuItem, TextField } from "@mui/material";
-import { Edit, Delete } from '@mui/icons-material';
+import { Edit } from '@mui/icons-material';
 
 const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
   const [selectedPlay, setSelectedPlay] = useState(null); // For editing overlay
@@ -48,15 +48,49 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
     }));
   };
 
+  const handleRatingChange = (position) => {
+    if (editedPlay.readonly) return;
+
+    const currentState = getMoonState(position);
+    
+    switch (currentState) {
+      case 'empty':
+        setEditedPlay((prev) => ({ ...prev, rating: position + 1 }));
+        break;
+      case 'full':
+        setEditedPlay((prev) => ({ ...prev, rating: position + 0.5 }));
+        break;
+      case 'half':
+        setEditedPlay((prev) => ({ ...prev, rating: position }));
+        break;
+      default:
+        break;
+    }
+  };
+
+  const getMoonState = (position) => {
+    const fullMoons = Math.floor(editedPlay.rating);
+    const hasHalf = editedPlay.rating % 1 !== 0;
+
+    if (position < fullMoons) return 'full';
+    if (position === fullMoons && hasHalf) return 'half';
+    return 'empty';
+  };
+
+  const getRatingText = (rating) => {
+    if (rating === 6) return "🕺 (Standing Ovation)";
+    const fullMoons = Math.floor(rating);
+    const hasHalfMoon = rating % 1 !== 0;
+    const moons = Array(fullMoons).fill("🌕");
+    if (hasHalfMoon) moons.push("🌗");
+    while (moons.length < 5) moons.push("🌑");
+    return moons.join(" ");
+  };
+
   const handleSave = () => {
     onEditPlay(editedPlay);
     setSelectedPlay(null); // Close overlay after saving
     setEditedPlay(null);
-  };
-
-  const handleDelete = () => {
-    onDeletePlay(selectedPlay.id); // Delete the selected play
-    setSelectedPlay(null); // Close the overlay after deleting
   };
 
   const renderPlayActions = (play) => (
@@ -73,19 +107,6 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
         }}
       >
         Edit
-      </Button>
-      <Button
-        onClick={() => handleDelete()}
-        variant="contained"
-        color="error"
-        startIcon={<Delete />}
-        sx={{
-          borderRadius: "10px",
-          padding: "8px 16px",
-          fontSize: "14px",
-        }}
-      >
-        Delete
       </Button>
     </div>
   );
@@ -118,17 +139,6 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
       </CardContent>
     </Card>
   );
-
-  // Function to convert rating number to text/emoji
-  const getRatingText = (rating) => {
-    if (rating === 6) return "🕺 (Standing Ovation)";
-    const fullMoons = Math.floor(rating);
-    const hasHalfMoon = rating % 1 !== 0;
-    const moons = Array(fullMoons).fill("🌕");
-    if (hasHalfMoon) moons.push("🌗");
-    while (moons.length < 5) moons.push("🌑");
-    return moons.join(" ");
-  };
 
   return (
     <div style={{ margin: "20px" }}>
@@ -189,21 +199,33 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
               sx={{ mb: 2 }}
             />
 
-            <Select
-              name="rating"
-              value={editedPlay.rating}
-              onChange={handleInputChange}
-              fullWidth
-              sx={{ mb: 2 }}
-            >
-              <MenuItem value={0}>Unrated</MenuItem>
-              <MenuItem value={1}>🌑</MenuItem>
-              <MenuItem value={2}>🌗</MenuItem>
-              <MenuItem value={3}>🌕</MenuItem>
-              <MenuItem value={4}>🌕🌕</MenuItem>
-              <MenuItem value={5}>🌕🌕🌕</MenuItem>
-              <MenuItem value={6}>🕺</MenuItem>
-            </Select>
+            <Box sx={{ display: "flex", gap: "10px", marginTop: "20px" }}>
+              {[0, 1, 2, 3, 4].map((position) => (
+                <span
+                  key={position}
+                  onClick={() => handleRatingChange(position)}
+                  style={{
+                    fontSize: "24px",
+                    cursor: "pointer",
+                    color: getMoonState(position) === "empty" ? "#D3D3D3" : "#FFD700",
+                    margin: "0 5px",
+                  }}
+                >
+                  🌕
+                </span>
+              ))}
+              <span
+                onClick={() => handleRatingChange(6)}
+                style={{
+                  fontSize: "24px",
+                  cursor: "pointer",
+                  color: editedPlay.rating === 6 ? "#FFD700" : "#D3D3D3",
+                  margin: "0 5px",
+                }}
+              >
+                🕺
+              </span>
+            </Box>
 
             <Box sx={{ display: "flex", gap: "10px", marginTop: "20px" }}>
               <Button
@@ -212,13 +234,6 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
                 color="success"
               >
                 Save
-              </Button>
-              <Button
-                onClick={handleDelete}
-                variant="contained"
-                color="error"
-              >
-                Delete
               </Button>
               <Button
                 onClick={handleOverlayClose}
