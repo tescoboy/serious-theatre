@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from './components/ui/card';
 
 
+
 import { Moon, User, Calendar, Search, Edit, Trash, X } from 'lucide-react';
 
 const TheatreApp = () => {
