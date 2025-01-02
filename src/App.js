@@ -22,12 +22,20 @@ const App = () => {
     setPlays((prevPlays) => prevPlays.filter((play) => play.id !== id));
   };
 
+  const editPlay = (updatedPlay) => {
+    setPlays((prevPlays) =>
+      prevPlays.map((play) =>
+        play.id === updatedPlay.id ? updatedPlay : play
+      )
+    );
+  };
+
   return (
     <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
       <h1>Serious Theatre</h1>
       <h2>Track Your Plays</h2>
       <InputSection addPlay={addPlay} rating={rating} setRating={setRating} />
-      <Dashboard plays={plays} onDeletePlay={deletePlay} />
+      <Dashboard plays={plays} onEditPlay={editPlay} onDeletePlay={deletePlay} />
     </div>
   );
 };
