@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./index.css"; // Import the CSS file
 
 const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
   const [selectedPlay, setSelectedPlay] = useState(null); // For editing overlay
@@ -39,29 +40,13 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
     <div style={{ display: "flex", gap: "10px" }}>
       <button
         onClick={() => handleEditClick(play)}
-        style={{
-          backgroundColor: "#4A90E2", // Modern blue color
-          color: "white",
-          border: "none",
-          padding: "8px 16px",
-          borderRadius: "8px",
-          cursor: "pointer",
-          fontSize: "14px",
-        }}
+        className="button button--edit"
       >
         Edit
       </button>
       <button
         onClick={() => onDeletePlay(play.id)}
-        style={{
-          backgroundColor: "#E94E77", // Soft red color
-          color: "white",
-          border: "none",
-          padding: "8px 16px",
-          borderRadius: "8px",
-          cursor: "pointer",
-          fontSize: "14px",
-        }}
+        className="button button--delete"
       >
         Delete
       </button>
@@ -69,30 +54,12 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
   );
 
   const renderTile = (title, data) => (
-    <div
-      style={{
-        backgroundColor: "#F4F4F9", // Soft light gray background
-        padding: "20px",
-        borderRadius: "12px",
-        boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.1)",
-        marginBottom: "20px", // Space between tiles
-      }}
-    >
-      <h3 style={{ fontSize: "20px", color: "#333", fontWeight: "600" }}>{title}</h3>
-      <ul style={{ listStyle: "none", padding: 0 }}>
+    <div className="tile">
+      <h3>{title}</h3>
+      <ul>
         {data.length > 0 ? (
           data.map((play) => (
-            <li
-              key={play.id}
-              style={{
-                marginBottom: "15px",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                fontSize: "16px",
-                color: "#555",
-              }}
-            >
+            <li key={play.id}>
               <span>
                 <strong>{play.name}</strong> ({play.date})
               </span>
@@ -100,35 +67,26 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
             </li>
           ))
         ) : (
-          <p style={{ color: "#777" }}>No plays available.</p>
+          <p>No plays available.</p>
         )}
       </ul>
     </div>
   );
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column", // Stacking tiles vertically
-        gap: "30px", // Add space between tiles
-        padding: "40px",
-        backgroundColor: "#FAFAFA", // Light background for the entire dashboard
-        fontFamily: "'Roboto', sans-serif", // Modern font family
-      }}
-    >
+    <div className="dashboard">
       {/* Summary Tiles */}
-      <div style={{ textAlign: "center" }}>
-        <h3 style={{ fontSize: "22px", color: "#333", fontWeight: "600" }}>Total Plays Seen</h3>
-        <p style={{ fontSize: "18px", color: "#4A4A4A" }}>{totalPlays}</p>
+      <div className="dashboard__summary">
+        <h3>Total Plays Seen</h3>
+        <p>{totalPlays}</p>
       </div>
-      <div style={{ textAlign: "center" }}>
-        <h3 style={{ fontSize: "22px", color: "#333", fontWeight: "600" }}>Total This Year</h3>
-        <p style={{ fontSize: "18px", color: "#4A4A4A" }}>{totalThisYear}</p>
+      <div className="dashboard__summary">
+        <h3>Total This Year</h3>
+        <p>{totalThisYear}</p>
       </div>
-      <div style={{ textAlign: "center" }}>
-        <h3 style={{ fontSize: "22px", color: "#333", fontWeight: "600" }}>Total This Month</h3>
-        <p style={{ fontSize: "18px", color: "#4A4A4A" }}>{totalThisMonth}</p>
+      <div className="dashboard__summary">
+        <h3>Total This Month</h3>
+        <p>{totalThisMonth}</p>
       </div>
 
       {/* Detailed Tiles */}
@@ -139,45 +97,14 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
 
       {/* Edit Overlay */}
       {selectedPlay && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100vw",
-            height: "100vh",
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: "white",
-              padding: "20px",
-              borderRadius: "12px",
-              boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.1)",
-              width: "400px",
-            }}
-          >
-            <h3 style={{ fontSize: "22px", color: "#333", fontWeight: "600" }}>Edit Play</h3>
-            <p style={{ fontSize: "16px", color: "#555" }}>
+        <div className="overlay">
+          <div className="overlay__content">
+            <h3>Edit Play</h3>
+            <p>
               <strong>{selectedPlay.name}</strong> ({selectedPlay.date})
             </p>
             {/* Editing logic (input fields) */}
-            <button
-              onClick={handleOverlayClose}
-              style={{
-                backgroundColor: "#E94E77", // Soft red color
-                color: "white",
-                border: "none",
-                padding: "8px 16px",
-                borderRadius: "8px",
-                cursor: "pointer",
-                fontSize: "14px",
-              }}
-            >
+            <button onClick={handleOverlayClose} className="button button--close">
               Close
             </button>
           </div>
