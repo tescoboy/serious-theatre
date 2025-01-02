@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from './components/ui/card';
 import { Moon, User, Calendar, Search, Edit, Trash, X, Wifi, WifiOff } from 'lucide-react';
 
 // First, define the RatingInput component
