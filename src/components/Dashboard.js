@@ -1,81 +1,122 @@
-import React, { useState } from "react";
+// Dashboard.js
+import React, { useState } from 'react';
 
-const Dashboard = ({ plays, onEditPlay }) => {
-  const [selectedPlay, setSelectedPlay] = useState(null); // For editing overlay
+const Dashboard = ({ plays, onUpdatePlay }) => {
+  const [editingPlay, setEditingPlay] = useState(null);
 
-  const renderRating = (rating) => {
-    if (rating === "Standing Ovation") {
-      return <span style={{ fontSize: "24px", color: "purple" }}>🕺</span>;
-    }
-    const fullMoons = Math.floor(rating);
-    const isHalfMoon = rating % 1 !== 0;
-    return (
-      <div style={{ display: "flex", alignItems: "center", gap: "2px" }}>
-        {[...Array(5)].map((_, index) => (
-          <span
-            key={index}
-            style={{
-              fontSize: "24px",
-              color: index < fullMoons ? "yellow" : "grey",
-            }}
-          >
-            {index === fullMoons && isHalfMoon ? "🌗" : "🌕"}
-          </span>
-        ))}
-      </div>
-    );
+  const handleMoonClick = (index, play) => {
+    const clickedRating = index + 1;
+    const newRating =
+      play.rating === clickedRating ? clickedRating - 0.5 : clickedRating;
+
+    onUpdatePlay({ ...play, rating: newRating, standingOvation: false });
+  };
+
+  const handleStandingOvation = (play) => {
+    onUpdatePlay({ ...play, rating: 5, standingOvation: true });
   };
 
   return (
     <div>
-      <h2>Your Plays</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Play Name</th>
-            <th>Date</th>
-            <th>Rating</th>
-          </tr>
-        </thead>
-        <tbody>
-          {plays.map((play) => (
-            <tr key={play.id}>
-              <td>{play.name}</td>
-              <td>{play.date}</td>
-              <td>{renderRating(play.rating)}</td>
-              <td>
-                <button onClick={() => setSelectedPlay(play)}>Edit</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      {selectedPlay && (
+      <h2>Plays Dashboard</h2>
+      {plays.map((play) => (
+        <div key={play.id}>
+          <h3>{play.name}</h3>
+          <p>{play.date}</p>
+          <div>
+            {[0, 1, 2, 3, 4].map((index) => (
+              <span
+                key={index}
+                onClick={() => handleMoonClick(index, play)}
+                style={{
+                  cursor: 'pointer',
+                  color: play.rating >= index + 1 ? 'yellow' : 'gray',
+                }}
+              >
+                🌙
+              </span>
+            ))}
+            <span
+              onClick={() => handleStandingOvation(play)}
+              style={{
+                cursor: 'pointer',
+                color: play.standingOvation ? 'yellow' : 'gray',
+              }}
+            >
+              👨
+            </span>
+          </div>
+          <button onClick={() => setEditingPlay(play)}>Edit</button>
+        </div>
+      ))}
+
+      {editingPlay && (
         <div>
-          <h3>Edit Play</h3>
-          <input
-            type="text"
-            value={selectedPlay.name}
-            onChange={(e) =>
-              setSelectedPlay({ ...selectedPlay, name: e.target.value })
-            }
-          />
-          <input
-            type="date"
-            value={selectedPlay.date}
-            onChange={(e) =>
-              setSelectedPlay({ ...selectedPlay, date: e.target.value })
-            }
-          />
+          <h2>Edit Play</h2>
+          <div>
+            <label>Play Name</label>
+            <input
+              type="text"
+              value={editingPlay.name}
+              onChange={(e) =>
+                setEditingPlay({ ...editingPlay, name: e.target.value })
+              }
+            />
+          </div>
+          <div>
+            <label>Date</label>
+            <input
+              type="date"
+              value={editingPlay.date}
+              onChange={(e) =>
+                setEditingPlay({ ...editingPlay, date: e.target.value })
+              }
+            />
+          </div>
+          <div>
+            <label>Rating</label>
+            <div>
+              {[0, 1, 2, 3, 4].map((index) => (
+                <span
+                  key={index}
+                  onClick={() =>
+                    setEditingPlay({
+                      ...editingPlay,
+                      rating: editingPlay.rating === index + 1
+                        ? index + 0.5
+                        : index + 1,
+                    })
+                  }
+                  style={{
+                    cursor: 'pointer',
+                    color:
+                      editingPlay.rating >= index + 1 ? 'yellow' : 'gray',
+                  }}
+                >
+                  🌙
+                </span>
+              ))}
+              <span
+                onClick={() =>
+                  setEditingPlay({ ...editingPlay, rating: 5, standingOvation: true })
+                }
+                style={{
+                  cursor: 'pointer',
+                  color: editingPlay.standingOvation ? 'yellow' : 'gray',
+                }}
+              >
+                👨
+              </span>
+            </div>
+          </div>
           <button
             onClick={() => {
-              onEditPlay(selectedPlay);
-              setSelectedPlay(null);
+              onUpdatePlay(editingPlay);
+              setEditingPlay(null);
             }}
           >
-            Save
+            Save Changes
           </button>
-          <button onClick={() => setSelectedPlay(null)}>Cancel</button>
         </div>
       )}
     </div>
