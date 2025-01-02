@@ -29,7 +29,6 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
   const hallOfFame = plays.filter((play) => play.rating === 5 || play.rating === 6);
   const unratedPlays = plays.filter((play) => play.rating === 0);
 
-  // Edit overlay
   const handleEditClick = (play) => {
     setSelectedPlay(play);
     setEditedPlay({ ...play }); // Create a copy for editing
