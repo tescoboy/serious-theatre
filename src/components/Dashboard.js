@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import "../index.css"; // Path to go up one level and reference index.css
-
+import "../index.css"; // Import the CSS file
 
 const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
   const [selectedPlay, setSelectedPlay] = useState(null); // For editing overlay
+  const [editedPlay, setEditedPlay] = useState(null); // To track changes to the play being edited
 
   // Filtered data
   const totalPlays = plays.length;
@@ -28,13 +28,43 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
   const hallOfFame = plays.filter((play) => play.rating === 5 || play.rating === 6);
   const unratedPlays = plays.filter((play) => play.rating === 0);
 
-  // Edit overlay
+  // Handle Edit Click
   const handleEditClick = (play) => {
     setSelectedPlay(play);
+    setEditedPlay({ ...play }); // Set the play to be edited
   };
 
+  // Handle Input Change
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditedPlay((prevPlay) => ({
+      ...prevPlay,
+      [name]: value, // Update the field dynamically
+    }));
+  };
+
+  // Handle Overlay Close
   const handleOverlayClose = () => {
     setSelectedPlay(null);
+    setEditedPlay(null); // Reset the edited play
+  };
+
+  // Save Edits
+  const handleSaveEdit = () => {
+    if (editedPlay) {
+      onEditPlay(editedPlay); // Pass the updated play to parent
+      setSelectedPlay(null); // Close the edit overlay
+      setEditedPlay(null); // Reset the edited play
+    }
+  };
+
+  // Delete Play
+  const handleDeletePlay = () => {
+    if (editedPlay) {
+      onDeletePlay(editedPlay.id); // Delete play by its ID
+      setSelectedPlay(null); // Close the edit overlay after deletion
+      setEditedPlay(null); // Reset the edited play
+    }
   };
 
   const renderPlayActions = (play) => (
@@ -44,12 +74,6 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
         className="button button--edit"
       >
         Edit
-      </button>
-      <button
-        onClick={() => onDeletePlay(play.id)}
-        className="button button--delete"
-      >
-        Delete
       </button>
     </div>
   );
@@ -101,10 +125,47 @@ const Dashboard = ({ plays, onEditPlay, onDeletePlay }) => {
         <div className="overlay">
           <div className="overlay__content">
             <h3>Edit Play</h3>
-            <p>
-              <strong>{selectedPlay.name}</strong> ({selectedPlay.date})
-            </p>
-            {/* Editing logic (input fields) */}
+            <div>
+              <label>
+                Name:
+                <input
+                  type="text"
+                  name="name"
+                  value={editedPlay.name}
+                  onChange={handleInputChange}
+                />
+              </label>
+            </div>
+            <div>
+              <label>
+                Date:
+                <input
+                  type="date"
+                  name="date"
+                  value={editedPlay.date}
+                  onChange={handleInputChange}
+                />
+              </label>
+            </div>
+            <div>
+              <label>
+                Rating:
+                <input
+                  type="number"
+                  name="rating"
+                  value={editedPlay.rating}
+                  onChange={handleInputChange}
+                />
+              </label>
+            </div>
+            <div>
+              <button onClick={handleSaveEdit} className="button button--edit">
+                Save Changes
+              </button>
+              <button onClick={handleDeletePlay} className="button button--delete">
+                Delete Play
+              </button>
+            </div>
             <button onClick={handleOverlayClose} className="button button--close">
               Close
             </button>
